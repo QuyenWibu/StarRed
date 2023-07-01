@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "169146523443",
+    "project_id": "starred-13cf4",
+    "storage_bucket": "starred-13cf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169146523443:android:b0e4816549b7d1b79de846",
+        "android_client_info": {
+          "package_name": "com.example.saored"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169146523443-c0ucuul13aosf5il66g2dloddoshpss1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAxJtXFO29Wjgq4ZAzKzmllWF7sT_qzoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169146523443-c0ucuul13aosf5il66g2dloddoshpss1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

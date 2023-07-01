@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lavender</item>
+        <item name="colorPrimaryDark">#2196F3</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorAccent">@color/lavender</item>
+    </style>
+    <style name="AppThemeNo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/lavender</item>
+        <item name="colorPrimaryDark">#2196F3</item>
+        <item name="colorAccent">@color/lavender</item>
+        <item name="windowNoTitle">true</item>
+        </style>
+
+    <style name="AppThemeNo1" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lavender</item>
+        <item name="colorPrimaryDark">#2196F3</item>
+        <item name="colorAccent">@color/lavender</item>
+    </style>
+
+
+
+</resources>

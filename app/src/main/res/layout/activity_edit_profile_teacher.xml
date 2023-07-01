@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:gravity="center"
+    tools:context=".EditProfileAdmin">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="24dp"
+            android:background="@drawable/custom_edittext">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_avatar"
+        android:id="@+id/img_avatar"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/name"
+        android:drawableLeft="@drawable/ic_users"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custom_edittext"
+        android:hint="Tên của bạn"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:textColor="@color/black" />
+
+    <Button
+        android:layout_marginTop="40dp"
+        android:text="Cập nhật Profile"
+        android:id="@+id/updateButton"
+        android:background="@color/lavender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:padding="20dp"-->
+    <!--    android:orientation="vertical"-->
+    <!--    android:background="@color/white"-->
+    <!--    android:gravity="center"-->
+    <!--    tools:context=".Fragment.profileFragment">-->
+
+    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--        android:layout_width="120dp"-->
+    <!--        android:layout_height="120dp"-->
+    <!--        android:src="@drawable/ic_avatar"-->
+    <!--        android:id="@+id/img_avatar"/>-->
+
+    <!--    <EditText-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/edt_full_name"-->
+    <!--        android:padding="10dp"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        android:hint="Tên của bạn"/>-->
+
+    <!--    <EditText-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/email"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:padding="10dp"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        android:hint="Email của bạn"/>-->
+
+    <!--    <EditText-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/edt_class"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:padding="10dp"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        android:hint="Lớp"/>-->
+
+
+
+
+
+
+
+
+    <!--</LinearLayout>-->
