@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.namespace.R;
 import com.example.saored.R;
 import com.example.saored.adapters.AdapterRanking;
 import com.example.saored.models.ModelRaking;

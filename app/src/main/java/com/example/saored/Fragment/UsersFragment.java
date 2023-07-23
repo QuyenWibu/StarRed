@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.example.namespace.R;
 import com.example.saored.R;
 import com.example.saored.adapters.AdapterUsers;
 import com.example.saored.models.ModelUser;

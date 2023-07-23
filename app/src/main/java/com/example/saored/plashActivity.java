@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.namespace.R;
+
 public class plashActivity extends AppCompatActivity {
 
     @Override

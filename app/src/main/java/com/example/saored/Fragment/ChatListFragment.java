@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.namespace.R;
 import com.example.saored.AddPostActivity;
 import com.example.saored.R;
 import android.os.Bundle;
