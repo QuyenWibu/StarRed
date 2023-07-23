@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace 'com.example.namespace'
     lint {
         baseline = file("lint-baseline.xml")
     }

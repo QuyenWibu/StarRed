@@ -217,7 +217,7 @@ public class EditProfilePage extends AppCompatActivity {
 	}
 	private void showNamephoneupdate(String key) {
 		AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Cập nhật"+ key);
+		b.setTitle("Cập nhật");
 		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 
