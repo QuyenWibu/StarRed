@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.namespace.R;
-import com.example.saored.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
