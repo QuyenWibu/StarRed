@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 } else if (itemId == R.id.bantinh_nav) {
                     startActivity(new Intent(MainActivity.this, bantinh.class));
-                    finish();
                     return true;
                 } else if (itemId == R.id.Users_nav) {
                      openFragment(new UsersFragment());
