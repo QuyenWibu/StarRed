@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.namespace.R;
 import com.example.saored.R;
 
 public class lichFragment extends Fragment {
