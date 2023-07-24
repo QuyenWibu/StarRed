@@ -34,7 +34,6 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.namespace.R;
 import com.example.saored.adapters.AdapterChat;
 import com.example.saored.models.ModelChat;
 import com.google.android.gms.common.api.Api;
