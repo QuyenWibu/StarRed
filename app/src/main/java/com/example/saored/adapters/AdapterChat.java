@@ -72,10 +72,10 @@ import java.util.List;
         @Override
         public Myholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == MSG_TYPE_LEFT) {
-                View view = LayoutInflater.from(context).inflate(R.layout.row_chat_left, parent, false);
+                View view = LayoutInflater.from(context).inflate(R.layout.row_chat_right, parent, false);
                 return new Myholder(view);
             } else {
-                View view = LayoutInflater.from(context).inflate(R.layout.row_chat_right, parent, false);
+                View view = LayoutInflater.from(context).inflate(R.layout.row_chat_left, parent, false);
                 return new Myholder(view);
             }
         }
@@ -167,9 +167,9 @@ import java.util.List;
         public int getItemViewType(int position) {
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             if (list.get(position).getSender().equals(firebaseUser.getUid())) {
-                return MSG_TYPE_LEFT;
-            } else {
                 return MSG_TYPR_RIGHT;
+            } else {
+                return MSG_TYPE_LEFT;
             }
         }
 

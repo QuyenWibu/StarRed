@@ -68,7 +68,7 @@ public class login extends AppCompatActivity {
       OpenForgetPass.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              startActivity(new Intent(getApplicationContext(), ForgetPasswordActivity.class));
+              startActivity(new Intent(login.this, ForgetPasswordActivity.class));
           }
       });
 
