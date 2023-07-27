@@ -47,7 +47,6 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 
 	@Override
 	public void onBindViewHolder(@NonNull Myholder holder, final int position) {
-
 		final String hisuid = usersList.get(position).getUid();
 		String strImage = usersList.get(position).getImage();
 		String strName = usersList.get(position).getName();
