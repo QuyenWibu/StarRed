@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -269,17 +270,36 @@ public class chat extends AppCompatActivity {
                 if (which == 0) {
                      // if permission is not given
 
-                        pickFromCamera(); // if already access granted then click
+                    checkCameraPermission(); // if already access granted then click
                     }
                  else if (which == 1) {
 
-                        pickFromGallery(); // if already access granted then pick
+                    checkGalleryPermission(); // if already access granted then pick
                     }
                 }
         });
         builder.create().show();
     }
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
+        } else {
+            pickFromCamera();
+            // Permission already granted
+            // Perform required camera-related operations here
+        }
+    }
+    private void checkGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
+        } else {
+            pickFromGallery();
+            // Permission already granted
+            // Perform required gallery-related operations here
+        }
+    }
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // request for permission if not given
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
