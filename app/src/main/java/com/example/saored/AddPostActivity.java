@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -237,17 +240,36 @@ public class AddPostActivity extends AppCompatActivity {
                 // if access is not given then we will request for permission
                 if (which == 0) {
 
-                    pickFromCamera();
+                    checkCameraPermission();
                 }
                 else if (which == 1) {
 
-                    pickFromGallery();
+                    checkGalleryPermission();
                 }
             }
         });
         builder.create().show();
     }
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
+        } else {
+            pickFromCamera();
+            // Permission already granted
+            // Perform required camera-related operations here
+        }
+    }
+    private void checkGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
+        } else {
+            pickFromGallery();
+            // Permission already granted
+            // Perform required gallery-related operations here
+        }
+    }
     private void pickFromCamera() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Images.Media.TITLE, "Temp_pic");

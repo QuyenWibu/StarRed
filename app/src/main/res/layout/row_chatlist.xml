@@ -45,22 +45,14 @@
             android:text="Last Message"
             android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/blocking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_block_24" />
+
 
         <ImageView
             android:id="@+id/seen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/blocking"
             android:layout_alignParentEnd="true"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_block_24" />
+            android:layout_gravity="center_vertical"/>
 
     </RelativeLayout>
 
