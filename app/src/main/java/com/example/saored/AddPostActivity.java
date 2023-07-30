@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -123,8 +124,29 @@ public class AddPostActivity extends AppCompatActivity {
                 }
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissions();
+        }
     }
+    private void checkPermissions(){
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+
+        }
+
+    }
     private void uploadData(String title, String description, String uri) {
             pd.setMessage("Loading....");
             pd.show();
@@ -244,7 +266,7 @@ public class AddPostActivity extends AppCompatActivity {
                 }
                 else if (which == 1) {
 
-                    checkGalleryPermission();
+                    pickFromGallery();
                 }
             }
         });
@@ -259,17 +281,7 @@ public class AddPostActivity extends AppCompatActivity {
             // Perform required camera-related operations here
         }
     }
-    private void checkGalleryPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
-        } else {
-            pickFromGallery();
-            // Permission already granted
-            // Perform required gallery-related operations here
-        }
-    }
     private void pickFromCamera() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Images.Media.TITLE, "Temp_pic");
@@ -340,13 +352,18 @@ public class AddPostActivity extends AppCompatActivity {
             }
             break;
             case STORAGE_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery();
-                    } else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+                    // permission was granted.
+                    pickFromGallery();
+                } else {
+
+
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+
                 }
             }
             break;

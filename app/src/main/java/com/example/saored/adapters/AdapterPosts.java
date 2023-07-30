@@ -75,33 +75,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder>{
 
             }
         }
-
-
-
-//        holder.moreBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        holder.likeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        holder.shareBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(context, "Share", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     @Override
