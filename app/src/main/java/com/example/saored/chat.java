@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -87,7 +88,6 @@ public class chat extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
     boolean notify = false;
-    boolean isBlocked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,8 +182,29 @@ public class chat extends AppCompatActivity {
             }
         });
         readMessages();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissions();
+        }
     }
+    private void checkPermissions(){
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+
+        }
+
+    }
 
     @Override
     protected void onPause() {
@@ -274,7 +295,7 @@ public class chat extends AppCompatActivity {
                     }
                  else if (which == 1) {
 
-                    checkGalleryPermission(); // if already access granted then pick
+                    pickFromGallery(); // if already access granted then pick
                     }
                 }
         });
@@ -287,17 +308,6 @@ public class chat extends AppCompatActivity {
             pickFromCamera();
             // Permission already granted
             // Perform required camera-related operations here
-        }
-    }
-    private void checkGalleryPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
-        } else {
-            pickFromGallery();
-            // Permission already granted
-            // Perform required gallery-related operations here
         }
     }
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -317,13 +327,18 @@ public class chat extends AppCompatActivity {
             }
             break;
             case STORAGE_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery(); // if access granted then pick
-                    } else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+                    // permission was granted.
+                    pickFromGallery();
+                } else {
+
+
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+
                 }
             }
             break;
