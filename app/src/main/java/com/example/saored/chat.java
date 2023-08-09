@@ -1,5 +1,29 @@
 package com.example.saored;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.nfc.Tag;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -10,35 +34,21 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
-
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.saored.adapters.AdapterChat;
+import com.example.saored.models.JsonObjectRequestWithHeaders;
 import com.example.saored.models.ModelChat;
-import com.google.android.gms.common.api.Api;
+import com.example.saored.models.ModelUser;
+import com.example.saored.notification.Data;
+import com.example.saored.notification.Sender;
+import com.example.saored.notification.Token;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -53,7 +63,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -61,8 +74,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.Map;
 
 public class chat extends AppCompatActivity {
     Toolbar toolbar;
@@ -77,7 +89,7 @@ public class chat extends AppCompatActivity {
     ValueEventListener valueEventListener;
     List<ModelChat> chatList;
     AdapterChat adapterChat;
-
+    private RequestQueue requestQueue;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
     private static final int CAMERA_REQUEST = 100;
@@ -87,7 +99,7 @@ public class chat extends AppCompatActivity {
     Uri imageuri;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
-    boolean notify = false;
+    private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +114,13 @@ public class chat extends AppCompatActivity {
         msg = findViewById(R.id.messaget);
         send = findViewById(R.id.sendmsg);
         attach = findViewById(R.id.attachbtn);
-//        block = findViewById(R.id.block);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
-
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
         recyclerView = findViewById(R.id.chatrecycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        Intent intent = getIntent();
         hisUid = getIntent().getStringExtra("hisUid");
 
         // getting uid of another user using intent
@@ -186,6 +198,7 @@ public class chat extends AppCompatActivity {
             checkPermissions();
         }
     }
+
     private void checkPermissions(){
 
         if (ContextCompat.checkSelfPermission(this,
@@ -205,7 +218,6 @@ public class chat extends AppCompatActivity {
         }
 
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -289,15 +301,15 @@ public class chat extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 if (which == 0) {
-                     // if permission is not given
+                    // if permission is not given
 
                     checkCameraPermission(); // if already access granted then click
-                    }
-                 else if (which == 1) {
+                }
+                else if (which == 1) {
 
                     pickFromGallery(); // if already access granted then pick
-                    }
                 }
+            }
         });
         builder.create().show();
     }
@@ -310,6 +322,18 @@ public class chat extends AppCompatActivity {
             // Perform required camera-related operations here
         }
     }
+    private void checkGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
+        } else {
+            pickFromGallery();
+            // Permission already granted
+            // Perform required gallery-related operations here
+        }
+    }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // request for permission if not given
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -501,7 +525,72 @@ public class chat extends AppCompatActivity {
 
             }
         });
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myuid);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ModelUser user = snapshot.getValue(ModelUser.class);
+                if(notify){
+                    sendNotification(hisUid, user.getName(), message);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+    private void sendNotification(final String hisUid,final String name,final String message) {
+        DatabaseReference allTokens= FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = allTokens.orderByKey().equalTo(hisUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds: snapshot.getChildren()){
+                    Token token = ds.getValue(Token.class);
+                    Data data = new Data(myuid, name+": "+message,"tin nhắn mới",hisUid,R.drawable.ic_avatar);
+                    assert token != null;
+                    Sender sender = new Sender(data, token.getToken());
+                    try{
+                        JSONObject senderJsonObj = new JSONObject(new Gson().toJson(sender));
+                        JsonObjectRequestWithHeaders jsonObjectRequest = new JsonObjectRequestWithHeaders(Request.Method.POST, "https://fcm.googleapis.com/fcm/send", senderJsonObj,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Log.d("JSON_RESPONSE", "onresponse: " + response.toString());
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d("JSON_RESPONSE", "onresponse: " + error.toString());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String, String> headers = new HashMap<>();
+                                headers.put("Content-Type", "application/json");
+                                headers.put("Authorization", "key= AAAAJ2HrHzM:APA91bGGdkmhVdagpoib0tBnKX_DeLWC4yXWOSSDRkX8PxMX7RRGrt7IKqKYRNONfmSBs4wUqZ3_IYn3P4q-CZ_qQ5woxaToouzho-YAM_kI81zNCUQUc_wylpHpg7eMS0Y8cy2LoOaU");
+                                return headers;
+                            }
+                        };
+                        requestQueue.add(jsonObjectRequest);
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void checkUserStatus() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {

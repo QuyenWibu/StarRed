@@ -12,7 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -24,6 +26,9 @@ import com.example.saored.Fragment.UsersFragment;
 import com.example.saored.Fragment.homeAdminFragment;
 import com.example.saored.Fragment.homeTeacherFragment;
 import com.example.saored.Fragment.lichFragment;
+import com.example.saored.notification.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -35,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -47,6 +53,7 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
     private FirebaseDatabase firebaseDatabase;
     public  StorageReference storageReference;
     private FirebaseUser user;
+    public static String SHARED_PREFS = "sharedPrefs";
     DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
     public static final int MY_REQUEST_CODE = 10;
@@ -57,6 +64,7 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
     ActionBar actionBar;
     private NavigationView mNavigationView;
     FragmentManager fragmentManager;
+    String mUID;
 
 
     @Override
@@ -133,10 +141,39 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
         fragmentManager = getSupportFragmentManager();
         openFragment(new homeAdminFragment());
 
+        checkUserStatus();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
 
+                // Lấy token thành công
+                String token = task.getResult();
+                updateToken(token);
+            }
+        });
     }
 
+    @Override
+    protected void onStart() {
+        checkUserStatus();
+        super.onStart();
+    }
 
+    @Override
+    protected void onResume() {
+        checkUserStatus();
+        super.onResume();
+    }
+
+    private void updateToken(String token){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+        ref.child(mUID).setValue(mToken);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -149,6 +186,10 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
             openFragment(new ChangePasswordFragment());
         } else if (itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("email", "");
+            editor.apply();
             startActivity(new Intent(MainActivityTeacher.this, login.class));
             finish();
         }
@@ -168,5 +209,18 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
+    }
+    private void checkUserStatus(){
+        user = mAuth.getCurrentUser();
+        if (user != null){
+            mUID = user.getUid();
+            SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("Current_USERID", mUID);
+            editor.apply();
+        } else {
+
+        }
+
     }
 }

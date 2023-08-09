@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class login extends AppCompatActivity {
   private LinearLayout linearLayoutsignup;
   private EditText edtEmail, edtPass;
   private Button btnSignIn;
+  public static String SHARED_PREFS = "sharedPrefs";
   TextView OpenForgetPass;
     private ProgressDialog progressDialog;
   @Override
@@ -56,7 +58,7 @@ public class login extends AppCompatActivity {
       btnSignIn = findViewById(R.id.btnsignin);
       OpenForgetPass = findViewById(R.id.OpenForgetPass);
 
-
+      checkbox();
 
       btnSignIn.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -89,7 +91,15 @@ public class login extends AppCompatActivity {
             loginUser(strEmail, strPass);
         }
     }
-
+    private void checkbox(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String check = sharedPreferences.getString("email", "");
+        if(check.equals("true")){
+            Toast.makeText(this, "Login succesfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+    }
     private void loginUser(String strEmail, String strPass) {
         progressDialog.show();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -109,16 +119,31 @@ public class login extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String isAdmin = snapshot.getValue(String.class);
                                     if(Objects.equals(isAdmin, "0")){
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", "true");
+                                        editor.apply();
                                         Intent in = new Intent(login.this, MainActivity.class);
                                         startActivity(in);
                                         finishAffinity();
                                     }
                                     if (Objects.equals(isAdmin, "1")){
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", "true");
+                                        editor.apply();
                                         Intent intent = new Intent(login.this, AdminActivity.class);
                                         startActivity(intent);
                                         finishAffinity();
                                     }
                                     if (Objects.equals(isAdmin, "2")){
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", "true");
+                                        editor.apply();
                                         Intent intent = new Intent(login.this, MainActivityTeacher.class);
                                         startActivity(intent);
                                         finishAffinity();
