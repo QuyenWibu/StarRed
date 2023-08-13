@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home_nav"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
     <item android:id="@+id/adduser_nav"
         android:title="Add user"
         android:icon="@drawable/ic_baseline_person_add_24"/>

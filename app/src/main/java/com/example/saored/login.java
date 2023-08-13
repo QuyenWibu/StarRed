@@ -58,8 +58,6 @@ public class login extends AppCompatActivity {
       btnSignIn = findViewById(R.id.btnsignin);
       OpenForgetPass = findViewById(R.id.OpenForgetPass);
 
-      checkbox();
-
       btnSignIn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -91,15 +89,6 @@ public class login extends AppCompatActivity {
             loginUser(strEmail, strPass);
         }
     }
-    private void checkbox(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String check = sharedPreferences.getString("email", "");
-        if(check.equals("true")){
-            Toast.makeText(this, "Login succesfully", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        }
-    }
     private void loginUser(String strEmail, String strPass) {
         progressDialog.show();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -120,30 +109,19 @@ public class login extends AppCompatActivity {
                                     String isAdmin = snapshot.getValue(String.class);
                                     if(Objects.equals(isAdmin, "0")){
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString("email", "true");
-                                        editor.apply();
+
                                         Intent in = new Intent(login.this, MainActivity.class);
                                         startActivity(in);
                                         finishAffinity();
-                                    }
-                                    if (Objects.equals(isAdmin, "1")){
+                                    } else if
+                                    (Objects.equals(isAdmin, "1")){
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString("email", "true");
-                                        editor.apply();
                                         Intent intent = new Intent(login.this, AdminActivity.class);
                                         startActivity(intent);
                                         finishAffinity();
                                     }
-                                    if (Objects.equals(isAdmin, "2")){
+                                    else if (Objects.equals(isAdmin, "2")){
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString("email", "true");
-                                        editor.apply();
                                         Intent intent = new Intent(login.this, MainActivityTeacher.class);
                                         startActivity(intent);
                                         finishAffinity();

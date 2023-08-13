@@ -58,7 +58,7 @@ public class EditProfileAdmin extends AppCompatActivity {
     String uid;
     ActionBar actionBar;
     ImageView set;
-    TextView editname,edtClass;
+    TextView editname,edtClass,tvEmail;
     ProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
@@ -81,6 +81,8 @@ public class EditProfileAdmin extends AppCompatActivity {
 
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);
+        tvEmail = findViewById(R.id.email);
+
         updateProfile = findViewById(R.id.updateButton);
         pd = new ProgressDialog(this);
         pd.setCanceledOnTouchOutside(false);
@@ -98,9 +100,10 @@ public class EditProfileAdmin extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String strname = "" + dataSnapshot1.child("name").getValue();
                     String image = "" + dataSnapshot1.child("image").getValue();
+                    String email = "" + dataSnapshot1.child("email").getValue();
 
+                    editname.setText(strname);tvEmail.setText(email);
 
-                    editname.setText(strname);
                     try {
                         Glide.with(EditProfileAdmin.this).load(image).into(set);
                     } catch (Exception e) {

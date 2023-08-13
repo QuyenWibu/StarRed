@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:24.6.1'
     implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation 'com.google.firebase:firebase-messaging-ktx:23.2.0'
     implementation 'com.google.firebase:firebase-database:20.2.2'

@@ -22,13 +22,13 @@
         android:textStyle="bold"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvclass"
-        android:textSize="14sp"
-        android:text="class"
+        android:id="@+id/tvEmail"
+
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"/>
 

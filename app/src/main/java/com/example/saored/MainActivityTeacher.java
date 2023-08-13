@@ -24,6 +24,7 @@ import com.example.saored.Fragment.ChatListFragment;
 import com.example.saored.Fragment.RankingFragment;
 import com.example.saored.Fragment.UsersFragment;
 import com.example.saored.Fragment.homeAdminFragment;
+import com.example.saored.Fragment.homeFragment;
 import com.example.saored.Fragment.homeTeacherFragment;
 import com.example.saored.Fragment.lichFragment;
 import com.example.saored.notification.Token;
@@ -125,7 +126,11 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.rank_nav) {
+                if(itemId == R.id.home_nav){
+                    openFragment(new homeFragment());
+                    return true;
+                }
+                else if (itemId == R.id.rank_nav) {
                     openFragment(new RankingFragment());
                     return true;
                 } else if (itemId == R.id.Users_nav) {
@@ -142,19 +147,7 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
         openFragment(new homeAdminFragment());
 
         checkUserStatus();
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
-                    return;
-                }
 
-                // Lấy token thành công
-                String token = task.getResult();
-                updateToken(token);
-            }
-        });
     }
 
     @Override
@@ -178,18 +171,12 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.nav_home) {
-            openFragment(new homeTeacherFragment());
-        } else if (itemId == R.id.nav_myprofile) {
+        if (itemId == R.id.nav_myprofile) {
             startActivity(new Intent(MainActivityTeacher.this, EditProfileTeacher.class));
         } else if (itemId == R.id.changepass) {
             openFragment(new ChangePasswordFragment());
         } else if (itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("email", "");
-            editor.apply();
             startActivity(new Intent(MainActivityTeacher.this, login.class));
             finish();
         }
@@ -218,6 +205,19 @@ public class MainActivityTeacher extends AppCompatActivity implements Navigation
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("Current_USERID", mUID);
             editor.apply();
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Lấy token thành công
+                    String token = task.getResult();
+                    updateToken(token);
+                }
+            });
         } else {
 
         }

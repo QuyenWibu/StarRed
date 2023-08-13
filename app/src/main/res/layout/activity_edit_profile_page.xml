@@ -54,6 +54,17 @@
         android:minHeight="48dp"
         android:padding="10dp"
         android:textColor="@color/black" />
+            <TextView
+                android:drawableLeft="@drawable/ic_email"
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Email"
+                android:background="@drawable/custom_edittext"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:textColor="@color/black" />
 
     <Button
         android:layout_marginTop="40dp"

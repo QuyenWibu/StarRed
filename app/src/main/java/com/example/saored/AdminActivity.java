@@ -61,7 +61,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     FirebaseAuth mAuth;
     public static final int MY_REQUEST_CODE = 10;
     private CircleImageView imgAvatar;
-    private TextView tvname, tvclass;
+    private TextView tvname, tvEmail;
     String mUID;
     public static String SHARED_PREFS = "sharedPrefs";
 
@@ -80,7 +80,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         mNavigationView = findViewById(R.id.Nav_view);
         imgAvatar = mNavigationView.getHeaderView(0).findViewById(R.id.img_avatar);
         tvname = mNavigationView.getHeaderView(0).findViewById(R.id.tvName);
-        tvclass = mNavigationView.getHeaderView(0).findViewById(R.id.tvclass);
+        tvEmail = mNavigationView.getHeaderView(0).findViewById(R.id.tvEmail);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,11 +107,11 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String name = "" + ds.child("name").getValue();
-                    String strclass = "" + ds.child("lop").getValue();
                     String image = "" + ds.child("image").getValue();
+                    String email = "" + ds.child("email").getValue();
 
                     tvname.setText(name);
-                    tvclass.setText(strclass);
+                    tvEmail.setText(email);
                     try {
                         Glide.with(AdminActivity.this).load(image).placeholder(R.drawable.ic_avatar).into(imgAvatar);
                     } catch (Exception e) {
@@ -133,7 +133,11 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                  if (itemId == R.id.rank_nav) {
+                if(itemId == R.id.home_nav){
+                    openFragment(new homeAdminFragment());
+                    return true;
+                }
+                 else if (itemId == R.id.rank_nav) {
                     openFragment(new RankingFragment());
                     return true;
                 } else if (itemId == R.id.Users_nav) {
@@ -154,20 +158,9 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         fragmentManager = getSupportFragmentManager();
         openFragment(new homeAdminFragment());
 
-        checkUserStatus();
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
-                    return;
-                }
 
-                // Lấy token thành công
-                String token = task.getResult();
-                updateToken(token);
-            }
-        });
+        checkUserStatus();
+
     }
 
     @Override
@@ -192,18 +185,12 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.nav_home) {
-            openFragment(new homeAdminFragment());
-        } else if (itemId == R.id.nav_myprofile) {
+        if (itemId == R.id.nav_myprofile) {
             startActivity(new Intent(AdminActivity.this, EditProfileAdmin.class));
         } else if (itemId == R.id.changepass) {
             openFragment(new ChangePasswordFragment());
         } else if (itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("email", "");
-            editor.apply();
             startActivity(new Intent(AdminActivity.this, login.class));
             finish();
         }
@@ -232,6 +219,20 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("Current_USERID", mUID);
             editor.apply();
+
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Lấy token thành công
+                    String token = task.getResult();
+                    updateToken(token);
+                }
+            });
         } else {
 
         }

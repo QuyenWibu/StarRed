@@ -100,7 +100,7 @@ public class resgiter extends AppCompatActivity {
                                 hashMap.put("uid", uid);
                                 hashMap.put("name", strName);
                                 hashMap.put("lop", strClass);
-                                hashMap.put("image", "");
+                                hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/starred-13cf4.appspot.com/o/imagedef%2Fimage1.png?alt=media");
                                 hashMap1.put("scores",  0.0);
                                 hashMap.put("isAdmin", admin);
 
@@ -111,11 +111,11 @@ public class resgiter extends AppCompatActivity {
                                 reference.child(uid).setValue(hashMap);
                             }
 
-                            if(Objects.equals(admin, "1")) {
+                            else if(Objects.equals(admin, "1")) {
                                 hashMap.put("email", email);
                                 hashMap.put("uid", uid);
                                 hashMap.put("name", strName);
-                                hashMap.put("image", "");
+                                hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/starred-13cf4.appspot.com/o/imagedef%2Fimage1.png?alt=media");
                                 hashMap.put("isAdmin", admin);
 
 
@@ -125,11 +125,11 @@ public class resgiter extends AppCompatActivity {
                                 reference.child(uid).setValue(hashMap);
                             }
 
-                            if(Objects.equals(admin, "2")) {
+                           else if(Objects.equals(admin, "2")) {
                                 hashMap.put("email", email);
                                 hashMap.put("uid", uid);
                                 hashMap.put("name", strName);
-                                hashMap.put("image", "");
+                                hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/starred-13cf4.appspot.com/o/imagedef%2Fimage1.png?alt=media");
                                 hashMap.put("isAdmin", admin);
 
 
