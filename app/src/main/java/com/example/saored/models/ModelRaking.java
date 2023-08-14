@@ -25,9 +25,4 @@ public class ModelRaking  {
         return scores;
     }
 
-    //Override the compareTo method to compare items by score
-//    @Override
-//    public int compareTo(ModelRaking otherRanking) {
-//        return (int) (otherRanking.getScores() - this.scores);
-//    }
 }

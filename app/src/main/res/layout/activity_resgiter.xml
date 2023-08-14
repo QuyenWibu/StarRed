@@ -110,16 +110,20 @@
                 app:cornerRadius = "20dp"/>
 
             <Button
+                android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:text="Back"
-                android:id="@+id/back"
-                android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/lavender"
-                app:cornerRadius = "20dp"/>
+                android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
+                android:text="Back"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Nhấn nút back để sao lưu dữ liệu và đăng nhập lại"
+                android:layout_height="wrap_content"/>
 
 
         </LinearLayout>

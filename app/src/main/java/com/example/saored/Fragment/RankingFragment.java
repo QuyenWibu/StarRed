@@ -56,8 +56,6 @@ public class RankingFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
         list = new ArrayList<>();
         adapterRanking = new AdapterRanking(getActivity(), list);
         recyclerView.setAdapter(adapterRanking);
@@ -65,10 +63,18 @@ public class RankingFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                list.clear();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     ModelRaking ranking = userSnapshot.getValue(ModelRaking.class);
                     list.add(0,ranking);
                 }
+                Collections.sort(list, new Comparator<ModelRaking>() {
+                    @Override
+                    public int compare(ModelRaking o1, ModelRaking o2) {
+                        // Sắp xếp theo thứ tự giảm dần của điểm số
+                        return Double.compare(o2.getScores(), o1.getScores());
+                    }
+                });
                 adapterRanking.notifyDataSetChanged();
             }
 

@@ -42,6 +42,7 @@ public class AdapterRanking extends RecyclerView.Adapter<AdapterRanking.MyViewHo
         holder.Class.setText(user.getLop());
         holder.score.setText(String.valueOf(user.getScores()));
 
+
     }
 
     @Override
